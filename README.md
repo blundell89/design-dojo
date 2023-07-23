@@ -14,4 +14,66 @@ Assuming that we would like to replace the manual upload and reconciliation, how
 
 # System Design Overview
 
-![system-overview](system-overview.png)
+![system-overview](system-overview.drawio.png)
+
+## Architecture
+
+- Event driven
+- Each service is decoupled with its own data store and limited knowledge of other services
+
+## Security
+
+- All services, except the API Gateway, live on various interconnected private networks and are not exposed to the public internet
+- The API Gateway is exposed publicly so that the HTTP callback from Provider 3 can be received
+  - We could use something like an IP safe list to restrice access to Provider 3 via the API Gateway
+
+### Considerations
+
+- Would need to think about how we can achieve Exactly Once processing
+
+### Events
+
+- Reference data is used so that PII data is not transferred in messages. This could be sent encrypted if preferred
+- Bank integration services would use the `bankId` property to decide if the message is relevant to them. If using Azure Service Bus, this could be added as a SQL Filter and parsed from headers to be more cost efficient
+
+#### BatchPaymentRequested
+
+```JSON
+{
+  "bankId": "6e8d22e9-ce18-4b72-8212-127396175c82",
+  "batchId": "49a06117-9040-432b-81aa-cab724820175"
+}
+```
+
+#### BatchPaymentInitiated
+
+```JSON
+{
+  "bankId": "6e8d22e9-ce18-4b72-8212-127396175c82",
+  "batchId": "49a06117-9040-432b-81aa-cab724820175",
+  "initiatedAt": "2023-07-23T18:47:31.4542670Z"
+}
+```
+
+#### BatchPaymentCompleted
+
+```JSON
+{
+  "bankId": "6e8d22e9-ce18-4b72-8212-127396175c82",
+  "batchId": "49a06117-9040-432b-81aa-cab724820175",
+  "completedAt": "2023-07-23T18:47:31.4542670Z"
+}
+```
+
+#### BatchPaymentFailed
+
+```JSON
+{
+  "bankId": "6e8d22e9-ce18-4b72-8212-127396175c82",
+  "batchId": "49a06117-9040-432b-81aa-cab724820175",
+  "error": {
+    "correlationId": "42434234",
+    "message": "Service was unreachable. Failed after three retries"
+  }
+}
+```
