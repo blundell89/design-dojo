@@ -45,6 +45,8 @@ Assuming that we would like to replace the manual upload and reconciliation, how
 }
 ```
 
+The `batchId` would be used to `GET` the payment data for the batch from the payment request system. This would then be used by the bank integration service to send the batch request to the bank.
+
 #### BatchPaymentInitiated
 
 ```JSON
