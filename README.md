@@ -73,6 +73,7 @@ The `batchId` would be used to `GET` the payment data for the batch from the pay
 {
   "bankId": "6e8d22e9-ce18-4b72-8212-127396175c82",
   "batchId": "49a06117-9040-432b-81aa-cab724820175",
+  "failedAt": "2023-07-23T18:47:31.4542670Z",
   "error": {
     "correlationId": "42434234",
     "message": "Service was unreachable. Failed after three retries"
