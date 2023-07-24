@@ -25,7 +25,7 @@ Assuming that we would like to replace the manual upload and reconciliation, how
 
 - All services, except the API Gateway, live on various interconnected private networks and are not exposed to the public internet
 - The API Gateway is exposed publicly so that the HTTP callback from Provider 3 can be received
-  - We could use something like an IP safe list to restrice access to Provider 3 via the API Gateway
+  - We could use something like an IP safe list to restrict access to Provider 3 via the API Gateway
 
 ### Considerations
 
